@@ -7,6 +7,8 @@ import copy
 import json
 import sklearn.externals
 import joblib
+from prettytable import PrettyTable, from_csv
+from tabulate import tabulate
 
 cred = 0
 def connect_to_my_db():
@@ -66,6 +68,17 @@ def data_delete(name_path):
     return ref.get()
 
 
+def PrettyTable_print(data):
+    #x = PrettyTable()
+    #x.field_names = data.columns
+    # for i in range(data.shape[0]):
+    #     x.add_rows(data.iloc[i,:])
+    # x.add_rows([i for i in data.iloc[0,:]])
+    # x = from_csv(data.to_csv())
+    with open(data.to_csv(), "r") as fp: 
+        x = from_csv(fp)
+    print(x)
+
 def main():
     
     # Реализовать:
@@ -93,7 +106,11 @@ def main():
     test = ref.get()
     df = pd.DataFrame(ref.get())
     print(type(test))
-    print(df)
+    #PrettyTable_print(df)
+    # print(df.to_markdown())
+    # print(tabulate(df, headers='keys', tablefmt='psql'))
+    # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
+    print(tabulate(df, headers='keys', tablefmt='github'))
 
     
     is_none(data_delete('Data_uncertain')) # Удалил из бд
