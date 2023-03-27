@@ -107,10 +107,10 @@ def main():
     df = pd.DataFrame(ref.get())
     print(type(test))
     #PrettyTable_print(df)
-    # print(df.to_markdown())
+    print(df.to_markdown())
     # print(tabulate(df, headers='keys', tablefmt='psql'))
     # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
-    print(tabulate(df, headers='keys', tablefmt='github'))
+    # print(tabulate(df, headers='keys', tablefmt='github'))
 
     
     is_none(data_delete('Data_uncertain')) # Удалил из бд
