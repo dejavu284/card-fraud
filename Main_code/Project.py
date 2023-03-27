@@ -138,7 +138,7 @@ def main():
 
     #
     # Загрузка сохраненной модели
-    loaded_model = joblib.load('Project_Credit_Card\Code\Main_code\LR_model.sav')
+    loaded_model = joblib.load('Project_Credit_Card\Code\Main_code\RF_model.sav')
     y_prob = loaded_model.predict_proba(X_test)
     y_prob = pd.DataFrame(y_prob, index=y_test.index).iloc[:,-1]
     # y_prob = id_card # Kод для алгоритма машинного обучения
