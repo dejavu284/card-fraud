@@ -2,13 +2,9 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import pandas as pd
-#import Algoritm as alg
-import copy
 import json
-import sklearn.externals
 import joblib
-from prettytable import PrettyTable, from_csv
-from tabulate import tabulate
+import time
 
 cred = 0
 def connect_to_my_db():
@@ -68,17 +64,6 @@ def data_delete(name_path):
     return ref.get()
 
 
-def PrettyTable_print(data):
-    #x = PrettyTable()
-    #x.field_names = data.columns
-    # for i in range(data.shape[0]):
-    #     x.add_rows(data.iloc[i,:])
-    # x.add_rows([i for i in data.iloc[0,:]])
-    # x = from_csv(data.to_csv())
-    with open(data.to_csv(), "r") as fp: 
-        x = from_csv(fp)
-    print(x)
-
 def main():
     
     # Реализовать:
@@ -114,7 +99,7 @@ def main():
 
     
     is_none(data_delete('Data_uncertain')) # Удалил из бд
-    is_not_none(load_data(df.T, 'Data_uncertain')) # сразу востанавливаю данные, это временная мера
+    #is_not_none(load_data(df.T, 'Data_uncertain')) # сразу востанавливаю данные, это временная мера
 
     is_none(data_delete('Data_certain'))
     #is_not_none(load_data(df.T, 'Data_certain')) # Пока добавляю в certain до алгоритма машинного обучения, но вообще нужно после
@@ -159,10 +144,13 @@ def main():
 
 if __name__ == "__main__":
     connect_to_Kirill_db()
-    if db.reference('Data_uncertain').get() is not None:
-        is_not_none(db.reference('Data_uncertain').get())
-        main()
-    else: is_not_none(db.reference('Data_uncertain').get())
+    while True:
+        time.sleep(1)
+        if db.reference('Data_uncertain').get() is not None:
+            is_not_none(db.reference('Data_uncertain').get())
+            main()
+        else: is_not_none(db.reference('Data_uncertain').get())
+
     
 
 
