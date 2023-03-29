@@ -4,7 +4,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 import pandas as pd
 import joblib
-
+input()
 cred = 0
 def connect_to_my_db():
     cred = credentials.Certificate(
