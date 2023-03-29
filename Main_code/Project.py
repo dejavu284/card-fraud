@@ -1,5 +1,3 @@
-print('Ты пидарас, нажми чёто')
-input()
 import json
 import firebase_admin
 from firebase_admin import credentials
@@ -142,20 +140,16 @@ def main():
     print(pd.DataFrame(ref.get()))
 
 
-
 if __name__ == "__main__":
     print('Ты пидарас, нажми чёто')
-    input()
     connect_to_Kirill_db()
     if db.reference('Data_uncertain').get() is not None:
         is_not_none(db.reference('Data_uncertain').get())
         main()
     else: is_not_none(db.reference('Data_uncertain').get())
-    print('Дело сделано ублюдок, нажми чтоб закрыть')
+    print('Дело сделано ублюдок, энтер чтоб закрыть')
     input()
 
-print('Ты пидарас, нажми чёто')
-input()
 
 
 # from firebase_admin import credentials, firestore
