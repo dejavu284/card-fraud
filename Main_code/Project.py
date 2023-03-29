@@ -6,8 +6,6 @@ from firebase_admin import credentials
 from firebase_admin import db
 import pandas as pd
 import joblib
-from prettytable import PrettyTable, from_csv
-from tabulate import tabulate
 
 cred = 0
 def connect_to_my_db():
@@ -66,17 +64,6 @@ def data_delete(name_path):
     ref.delete()
     return ref.get()
 
-
-def PrettyTable_print(data):
-    #x = PrettyTable()
-    #x.field_names = data.columns
-    # for i in range(data.shape[0]):
-    #     x.add_rows(data.iloc[i,:])
-    # x.add_rows([i for i in data.iloc[0,:]])
-    # x = from_csv(data.to_csv())
-    with open(data.to_csv(), "r") as fp: 
-        x = from_csv(fp)
-    print(x)
 
 def main():
     
