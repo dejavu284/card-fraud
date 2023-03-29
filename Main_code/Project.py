@@ -1,11 +1,10 @@
+print('Ты пидарас, нажми чёто')
+input()
+import json
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 import pandas as pd
-#import Algoritm as alg
-import copy
-import json
-import sklearn.externals
 import joblib
 from prettytable import PrettyTable, from_csv
 from tabulate import tabulate
@@ -21,7 +20,7 @@ def connect_to_my_db():
 
 def connect_to_Kirill_db():
     cred = credentials.Certificate(
-        r"Project_Credit_Card\Code\app-tracking-fraud-transact-firebase-adminsdk-x9r28-0fc99ebd0a.json"
+        r"C:\Users\Kira\Desktop\app-tracking-fraud-transact-firebase-adminsdk-x9r28-0fc99ebd0a.json"
         )
     firebase_admin.initialize_app(
         cred ,{'databaseURL':'https://app-tracking-fraud-transact-default-rtdb.europe-west1.firebasedatabase.app'})#, name='My_firebase')
@@ -107,7 +106,7 @@ def main():
     df = pd.DataFrame(ref.get())
     print(type(test))
     #PrettyTable_print(df)
-    print(df.to_markdown())
+    print(df)
     # print(tabulate(df, headers='keys', tablefmt='psql'))
     # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
     # print(tabulate(df, headers='keys', tablefmt='github'))
@@ -138,7 +137,7 @@ def main():
 
     #
     # Загрузка сохраненной модели
-    loaded_model = joblib.load('Project_Credit_Card\Code\Main_code\RF_model.sav')
+    loaded_model = joblib.load(r'C:\Users\Kira\Desktop\RF_model.sav')
     y_prob = loaded_model.predict_proba(X_test)
     y_prob = pd.DataFrame(y_prob, index=y_test.index).iloc[:,-1]
     # y_prob = id_card # Kод для алгоритма машинного обучения
@@ -158,13 +157,18 @@ def main():
 
 
 if __name__ == "__main__":
+    print('Ты пидарас, нажми чёто')
+    input()
     connect_to_Kirill_db()
     if db.reference('Data_uncertain').get() is not None:
         is_not_none(db.reference('Data_uncertain').get())
         main()
     else: is_not_none(db.reference('Data_uncertain').get())
-    
+    print('Дело сделано ублюдок, нажми чтоб закрыть')
+    input()
 
+print('Ты пидарас, нажми чёто')
+input()
 
 
 # from firebase_admin import credentials, firestore
