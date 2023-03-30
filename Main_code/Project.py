@@ -120,7 +120,7 @@ def main():
 
     print(X_test, '\n')
     print(y_test, '\n')
-
+    input()
     #
     # Загрузка сохраненной модели
     loaded_model = joblib.load('Project_Credit_Card\Code\Main_code\RF_model.sav')
