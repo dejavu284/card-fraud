@@ -110,13 +110,22 @@ def main():
     new_df = pd.DataFrame()
     for i in range(1,29):
         new_df[f'V{i}'] = df[f'v{i}']
-
+    
     new_df['Class'] = df.classTran
+    new_df['Amount'] = df.amount
+    new_df['Time'] = df.time
+
     print(new_df, '\n')
     print(new_df.columns, '\n')
 
-    X_test = new_df.iloc[:, :-1]
-    y_test = new_df.iloc[:, -1]
+    flag = 'Aliens'    
+    if flag != 'Aliens':
+        X_test = new_df.iloc[:, :-3]
+        y_test = new_df.iloc[:, -3]
+    else:
+        data_model = new_df.drop(['V13', 'V25', 'Time', 'V20', 'V22', 'V8', 'V15', 'V19', 'V2'], axis=1)
+        X_test = data_model.iloc[:, :-1]
+        y_test = data_model.iloc[:, -1]
 
     print(X_test, '\n')
     print(y_test, '\n')
