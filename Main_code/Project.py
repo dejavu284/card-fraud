@@ -118,12 +118,24 @@ def main():
     print(new_df, '\n')
     print(new_df.columns, '\n')
 
-    flag = 'Aliens'    
-    if flag != 'Aliens':
+    flag = '0.97'    
+    if flag == 'my':
         X_test = new_df.iloc[:, :-3]
         y_test = new_df.iloc[:, -3]
         # Загрузка сохраненной модели
         loaded_model = joblib.load('Project_Credit_Card\Code\Main_code\RF_model.sav')
+    elif flag == '0.97':
+        data_model = new_df[['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11',
+       'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21',
+       'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Class']]
+        print(f'Data_model is:\n{data_model}')
+        X_test = data_model.iloc[:, :-1]
+        y_test = data_model.iloc[:, -1]
+        name = 'RF'
+        Path = f'Project_Credit_Card\Code\Main_code\{name}_model.sav'
+
+        # Загрузка сохраненной модели
+        loaded_model = joblib.load(Path)
     else:
         data_model = new_df[['V1', 'V3', 'V4', 'V5', 'V6', 'V7', 'V9', 'V10', 'V11', 'V12', 'V14',
                             'V16', 'V17', 'V18', 'V21', 'V23', 'V24', 'V26', 'V27', 'V28',
