@@ -122,28 +122,38 @@ def main():
     if flag != 'Aliens':
         X_test = new_df.iloc[:, :-3]
         y_test = new_df.iloc[:, -3]
+        # Загрузка сохраненной модели
+        loaded_model = joblib.load('Project_Credit_Card\Code\Main_code\RF_model.sav')
     else:
         data_model = new_df[['V1', 'V3', 'V4', 'V5', 'V6', 'V7', 'V9', 'V10', 'V11', 'V12', 'V14',
                             'V16', 'V17', 'V18', 'V21', 'V23', 'V24', 'V26', 'V27', 'V28',
-                            'Amount']]
+                            'Amount','Class']]
+        print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
+        name = 'LR'
+        Path = f'Project_Credit_Card\Code\Main_code\{name}_model.sav'
+
+
+        # Загрузка сохраненной модели
+        loaded_model = joblib.load(Path)
 
     print(X_test, '\n')
     print(y_test, '\n')
-    input()
     #
-    # Загрузка сохраненной модели
-    loaded_model = joblib.load('Project_Credit_Card\Code\Main_code\RF_model.sav')
     y_prob = loaded_model.predict_proba(X_test)
     y_prob = pd.DataFrame(y_prob, index=y_test.index).iloc[:,-1]
-    # y_prob = id_card # Kод для алгоритма машинного обучения
     #
 
     result = pd.DataFrame()
     result['id'] = id_card
     result['classTran'] = round(y_prob,2)
     print(result, '\n')
+    
+    test = pd.DataFrame()
+    test['prob'] = round(y_prob,2)
+    test['class'] = y_test
+    print(test)
 
     
     is_not_none(load_data(result.T, 'Data_certain'))
@@ -161,8 +171,6 @@ if __name__ == "__main__":
             is_not_none(db.reference('Data_uncertain').get())
             main()
         else: is_not_none(db.reference('Data_uncertain').get())
-
-    
 
 
 
