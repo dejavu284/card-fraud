@@ -111,8 +111,8 @@ def main():
     for i in range(1,29):
         new_df[f'V{i}'] = df[f'v{i}']
     
-    new_df['Class'] = df.classTran
     new_df['Amount'] = df.amount
+    new_df['Class'] = df.classTran
     new_df['Time'] = df.time
 
     print(new_df, '\n')
@@ -123,7 +123,9 @@ def main():
         X_test = new_df.iloc[:, :-3]
         y_test = new_df.iloc[:, -3]
     else:
-        data_model = new_df.drop(['V13', 'V25', 'Time', 'V20', 'V22', 'V8', 'V15', 'V19', 'V2'], axis=1)
+        data_model = new_df[['V1', 'V3', 'V4', 'V5', 'V6', 'V7', 'V9', 'V10', 'V11', 'V12', 'V14',
+                            'V16', 'V17', 'V18', 'V21', 'V23', 'V24', 'V26', 'V27', 'V28',
+                            'Amount']]
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
 
