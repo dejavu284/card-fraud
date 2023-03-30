@@ -131,7 +131,7 @@ def main():
         print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
-        name = 'LR'
+        name = 'MLP'
         Path = f'Project_Credit_Card\Code\Main_code\{name}_model.sav'
 
 
