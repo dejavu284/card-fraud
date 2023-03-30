@@ -5,6 +5,8 @@ import pandas as pd
 import json
 import joblib
 import time
+from pathlib import Path 
+from sklearn.utils import shuffle
 
 cred = 0
 def connect_to_my_db():
@@ -136,6 +138,18 @@ def main():
 
         # Загрузка сохраненной модели
         loaded_model = joblib.load(Path)
+    elif flag == '0.92':
+        data_model = new_df[['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11',
+       'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21',
+       'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Class']]
+        print(f'Data_model is:\n{data_model}')
+        X_test = data_model.iloc[:, :-1]
+        y_test = data_model.iloc[:, -1]
+        name = '2RF'
+        Path = f'Project_Credit_Card\Code\Main_code\{name}_model.sav'
+
+        # Загрузка сохраненной модели
+        loaded_model = joblib.load(Path)
     else:
         data_model = new_df[['V1', 'V3', 'V4', 'V5', 'V6', 'V7', 'V9', 'V10', 'V11', 'V12', 'V14',
                             'V16', 'V17', 'V18', 'V21', 'V23', 'V24', 'V26', 'V27', 'V28',
@@ -170,9 +184,6 @@ def main():
     
     is_not_none(load_data(result.T, 'Data_certain'))
 
-    ref = db.reference('Data_certain')
-    print(pd.DataFrame(ref.get()))
-
 
 
 if __name__ == "__main__":
@@ -183,6 +194,27 @@ if __name__ == "__main__":
             is_not_none(db.reference('Data_uncertain').get())
             main()
         else: is_not_none(db.reference('Data_uncertain').get())
+
+    # data = pd.read_csv(r'C:\Users\Я\Desktop\читы жизнь\Study\Programming\0_Jupyter\Project_Credit_Card\creditcard.csv')
+    # data = shuffle(data, random_state = 42)
+    # data_fraud = data[data.Class == 1].iloc[:10,:]
+    # data_nonfraud = data[data.Class == 0].iloc[:10,:]
+
+    # print(data_fraud.index)
+    # print(data_nonfraud.index)
+    # print(data_fraud)
+    # print(data_nonfraud)
+    # data = pd.concat([data_fraud, data_nonfraud], axis=0)
+    # # load_data(data_fraud, 'Data_uncertain')
+    # # load_data(data_nonfraud, 'Data_uncertain')
+    # filepath = Path(r'C:\Users\Я\Desktop\читы жизнь\Study\Programming\0_Jupyter\Project_Credit_Card\Code\Main_code\Kirushe.csv')  
+    # filepath.parent.mkdir(parents=True, exist_ok=True)  
+    # data.to_csv(filepath)
+  
+    
+
+
+
 
 
 
