@@ -93,7 +93,7 @@ def main():
     test = ref.get()
     df = pd.DataFrame(ref.get())
     print(type(test))
-    #PrettyTable_print(df)
+    #PrettyTable_print(df) 
     print(df.to_markdown())
     # print(tabulate(df, headers='keys', tablefmt='psql'))
     # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
@@ -120,7 +120,7 @@ def main():
     print(new_df, '\n')
     print(new_df.columns, '\n')
 
-    flag = '0.97'    
+    flag = '0.98'    
     if flag == 'my':
         X_test = new_df.iloc[:, :-3]
         y_test = new_df.iloc[:, -3]
@@ -135,6 +135,32 @@ def main():
         y_test = data_model.iloc[:, -1]
         name = 'RF'
         Path = f'Project_Credit_Card\Code\Main_code\{name}_model.sav'
+
+        # Загрузка сохраненной модели
+        loaded_model = joblib.load(Path)
+    elif flag == '0.94':
+        data_model = new_df[['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
+       'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
+       'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount', 'Class']]
+       
+        print(f'Data_model is:\n{data_model}')
+        X_test = data_model.iloc[:, :-1]
+        y_test = data_model.iloc[:, -1]
+        name = '3RF'
+        Path = fr'Project_Credit_Card\Code\Main_code\{name}_model.sav'
+
+        # Загрузка сохраненной модели
+        loaded_model = joblib.load(Path)
+    elif flag == '0.98':
+        data_model = new_df[['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
+       'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
+       'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount', 'Class']]
+       
+        print(f'Data_model is:\n{data_model}')
+        X_test = data_model.iloc[:, :-1]
+        y_test = data_model.iloc[:, -1]
+        name = 'LR'
+        Path = fr'Project_Credit_Card\Code\Main_code\{name}_model.sav'
 
         # Загрузка сохраненной модели
         loaded_model = joblib.load(Path)
@@ -167,6 +193,7 @@ def main():
     print(X_test, '\n')
     print(y_test, '\n')
     #
+    print(type(loaded_model))
     y_prob = loaded_model.predict_proba(X_test)
     y_prob = pd.DataFrame(y_prob, index=y_test.index).iloc[:,-1]
     #
