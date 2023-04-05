@@ -24,18 +24,6 @@ def connect_to_Kirill_db():
         cred ,{'databaseURL':'https://app-tracking-fraud-transact-default-rtdb.europe-west1.firebasedatabase.app'})#, name='My_firebase')
 
 
-def fast_read(name_path):
-    """Считывание данных из базы данных"""
-    ref = db.reference(name_path)
-    return ref.get()
-
-
-def print_ref(name_path):
-    """Вывод на экран данных из базы данных"""
-    ref = db.reference(name_path)
-    print(pd.DataFrame(ref.get()))
-
-
 def load_data(data, name_path):
     ref = db.reference(name_path)
     ref.set(json.loads(data.to_json()))
@@ -75,38 +63,18 @@ def main():
     #   Передача датафрейма в алгоритм машинного обучения
     #   Принятие измененного датасета, с определенном классом
     #   Отправка данных на бд сервер "Data_certain"
-         
-    #connect_to_my_db()
-
-    # Код для добавление данных из локальной базы, в облачную
-
-    # data = pd.read_csv('Project_Credit_Card\creditcard.csv').head(20)
-    # print(data.shape, '\n')
-    # ref_get = load_data(data, 'Data_uncertain')
-    # print(pd.DataFrame(ref_get).shape, '\n')
-
-
 
     ref = db.reference('Data_uncertain') # Зашёл к uncertain
     test = ref.get()
     df = pd.DataFrame(ref.get())
-    #print(type(test))
-    #PrettyTable_print(df) 
-    # print(df.to_markdown())
-    # print(tabulate(df, headers='keys', tablefmt='psql'))
-    # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
-    # print(tabulate(df, headers='keys', tablefmt='github'))
 
     
     data_delete('Data_uncertain') # Удалил из бд
     #is_not_none(load_data(df.T, 'Data_uncertain')) # сразу востанавливаю данные, это временная мера
 
     data_delete('Data_certain')
-    #is_not_none(load_data(df.T, 'Data_certain')) # Пока добавляю в certain до алгоритма машинного обучения, но вообще нужно после
 
     id_card = df.id # Запоминание индексов транзакций
-    #print(df, '\n')
-    #print(df.columns, '\n')
     new_df = pd.DataFrame()
     for i in range(1,29):
         new_df[f'V{i}'] = df[f'v{i}']
@@ -114,9 +82,6 @@ def main():
     new_df['Amount'] = df.amount
     new_df['Class'] = df.classTran
     new_df['Time'] = df.time
-
-    #print(new_df, '\n')
-    #print(new_df.columns, '\n')
 
     flag = '0.98'    
     if flag == 'my':
@@ -128,7 +93,6 @@ def main():
         data_model = new_df[['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11',
        'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21',
        'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Class']]
-        #print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = 'RF'
@@ -141,7 +105,6 @@ def main():
        'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
        'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount', 'Class']]
        
-       # print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = '3RF'
@@ -154,7 +117,6 @@ def main():
        'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
        'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount', 'Class']]
        
-       # print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = 'LR'
@@ -166,7 +128,6 @@ def main():
         data_model = new_df[['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11',
        'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21',
        'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Class']]
-        #print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = '2RF'
@@ -178,7 +139,6 @@ def main():
         data_model = new_df[['V1', 'V3', 'V4', 'V5', 'V6', 'V7', 'V9', 'V10', 'V11', 'V12', 'V14',
                             'V16', 'V17', 'V18', 'V21', 'V23', 'V24', 'V26', 'V27', 'V28',
                             'Amount','Class']]
-        #print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = 'MLP'
@@ -188,10 +148,6 @@ def main():
         # Загрузка сохраненной модели
         loaded_model = joblib.load(Path)
 
-    #print(X_test, '\n')
-    #print(y_test, '\n')
-    #
-    #print(type(loaded_model))
     y_prob = loaded_model.predict_proba(X_test)
     y_prob = pd.DataFrame(y_prob, index=y_test.index).iloc[:,-1]
     #
@@ -199,7 +155,6 @@ def main():
     result = pd.DataFrame()
     result['id'] = id_card
     result['classTran'] = round(y_prob,2)
-    #print(result, '\n')
     
     test = pd.DataFrame()
     test['prob'] = round(y_prob,2)
@@ -213,68 +168,9 @@ def main():
 
 if __name__ == "__main__":
     connect_to_Kirill_db()
+    is_not_none(db.reference('Data_uncertain').get())
     while True:
-        time.sleep(1)
         if db.reference('Data_uncertain').get() is not None:
-            db.reference('Data_uncertain').get()
             main()
-        else: is_not_none(db.reference('Data_uncertain').get())
-
-    # data = pd.read_csv(r'C:\Users\Я\Desktop\читы жизнь\Study\Programming\0_Jupyter\Project_Credit_Card\creditcard.csv')
-    # data = shuffle(data, random_state = 42)
-    # data_fraud = data[data.Class == 1].iloc[:10,:]
-    # data_nonfraud = data[data.Class == 0].iloc[:10,:]
-
-    # print(data_fraud.index)
-    # print(data_nonfraud.index)
-    # print(data_fraud)
-    # print(data_nonfraud)
-    # data = pd.concat([data_fraud, data_nonfraud], axis=0)
-    # # load_data(data_fraud, 'Data_uncertain')
-    # # load_data(data_nonfraud, 'Data_uncertain')
-    # filepath = Path(r'C:\Users\Я\Desktop\читы жизнь\Study\Programming\0_Jupyter\Project_Credit_Card\Code\Main_code\Kirushe.csv')  
-    # filepath.parent.mkdir(parents=True, exist_ok=True)  
-    # data.to_csv(filepath)
-  
-    
-
-
-
-
-
-
-# from firebase_admin import credentials, firestore
-
-# # Подключение к базе данных firebase
-# cred = credentials.Certificate("path/to/serviceAccountKey.json")
-# firebase_admin.initialize_app(cred)
-# db = firestore.client()
-
-# # Получение последних записей из коллекции 'data'
-# doc = db.collection('data').order_by(u'timestamp', direction=firestore.Query.DESCENDING).limit(10)
-
-# # Удалить только что считанные данные из базы данных:
-# batch = db.batch()
-# for obj in doc:
-#     ref = db.collection('data').document(obj.id)
-#     batch.delete(ref)
-# batch.commit()
-
-# # Преобразование json данных в pandas.DataFrame
-# data = []
-# for obj in doc:
-#     data.append(obj.to_dict())
-# df = pd.DataFrame(data)
-
-# # Выбор и использование алгоритма машинного обучения
-# from my_algorithm import my_algorithm
-# result = my_algorithm(df)
-
-# # Отправка результата в базу данных firebase
-# data = {
-#     'timestamp': firestore.SERVER_TIMESTAMP,
-#     'result': result
-# }
-# db.collection('results').add(data)
-
+        else: db.reference('Data_uncertain').get()
 
