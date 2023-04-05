@@ -5,7 +5,6 @@ import pandas as pd
 import json
 import joblib
 import time
-from pathlib import Path 
 from sklearn.utils import shuffle
 
 cred = 0
@@ -35,7 +34,6 @@ def print_ref(name_path):
     """Вывод на экран данных из базы данных"""
     ref = db.reference(name_path)
     print(pd.DataFrame(ref.get()))
-
 
 
 def load_data(data, name_path):
@@ -92,23 +90,23 @@ def main():
     ref = db.reference('Data_uncertain') # Зашёл к uncertain
     test = ref.get()
     df = pd.DataFrame(ref.get())
-    print(type(test))
+    #print(type(test))
     #PrettyTable_print(df) 
-    print(df.to_markdown())
+    # print(df.to_markdown())
     # print(tabulate(df, headers='keys', tablefmt='psql'))
     # print(tabulate(df, headers='keys', tablefmt='fancy_grid'))
     # print(tabulate(df, headers='keys', tablefmt='github'))
 
     
-    is_none(data_delete('Data_uncertain')) # Удалил из бд
+    data_delete('Data_uncertain') # Удалил из бд
     #is_not_none(load_data(df.T, 'Data_uncertain')) # сразу востанавливаю данные, это временная мера
 
-    is_none(data_delete('Data_certain'))
+    data_delete('Data_certain')
     #is_not_none(load_data(df.T, 'Data_certain')) # Пока добавляю в certain до алгоритма машинного обучения, но вообще нужно после
 
     id_card = df.id # Запоминание индексов транзакций
-    print(df, '\n')
-    print(df.columns, '\n')
+    #print(df, '\n')
+    #print(df.columns, '\n')
     new_df = pd.DataFrame()
     for i in range(1,29):
         new_df[f'V{i}'] = df[f'v{i}']
@@ -117,8 +115,8 @@ def main():
     new_df['Class'] = df.classTran
     new_df['Time'] = df.time
 
-    print(new_df, '\n')
-    print(new_df.columns, '\n')
+    #print(new_df, '\n')
+    #print(new_df.columns, '\n')
 
     flag = '0.98'    
     if flag == 'my':
@@ -130,7 +128,7 @@ def main():
         data_model = new_df[['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11',
        'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21',
        'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Class']]
-        print(f'Data_model is:\n{data_model}')
+        #print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = 'RF'
@@ -143,7 +141,7 @@ def main():
        'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
        'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount', 'Class']]
        
-        print(f'Data_model is:\n{data_model}')
+       # print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = '3RF'
@@ -156,7 +154,7 @@ def main():
        'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
        'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Amount', 'Class']]
        
-        print(f'Data_model is:\n{data_model}')
+       # print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = 'LR'
@@ -168,7 +166,7 @@ def main():
         data_model = new_df[['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11',
        'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21',
        'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28', 'Class']]
-        print(f'Data_model is:\n{data_model}')
+        #print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = '2RF'
@@ -180,7 +178,7 @@ def main():
         data_model = new_df[['V1', 'V3', 'V4', 'V5', 'V6', 'V7', 'V9', 'V10', 'V11', 'V12', 'V14',
                             'V16', 'V17', 'V18', 'V21', 'V23', 'V24', 'V26', 'V27', 'V28',
                             'Amount','Class']]
-        print(f'Data_model is:\n{data_model}')
+        #print(f'Data_model is:\n{data_model}')
         X_test = data_model.iloc[:, :-1]
         y_test = data_model.iloc[:, -1]
         name = 'MLP'
@@ -190,10 +188,10 @@ def main():
         # Загрузка сохраненной модели
         loaded_model = joblib.load(Path)
 
-    print(X_test, '\n')
-    print(y_test, '\n')
+    #print(X_test, '\n')
+    #print(y_test, '\n')
     #
-    print(type(loaded_model))
+    #print(type(loaded_model))
     y_prob = loaded_model.predict_proba(X_test)
     y_prob = pd.DataFrame(y_prob, index=y_test.index).iloc[:,-1]
     #
@@ -201,7 +199,7 @@ def main():
     result = pd.DataFrame()
     result['id'] = id_card
     result['classTran'] = round(y_prob,2)
-    print(result, '\n')
+    #print(result, '\n')
     
     test = pd.DataFrame()
     test['prob'] = round(y_prob,2)
@@ -209,7 +207,7 @@ def main():
     print(test)
 
     
-    is_not_none(load_data(result.T, 'Data_certain'))
+    load_data(result.T, 'Data_certain')
 
 
 
@@ -218,7 +216,7 @@ if __name__ == "__main__":
     while True:
         time.sleep(1)
         if db.reference('Data_uncertain').get() is not None:
-            is_not_none(db.reference('Data_uncertain').get())
+            db.reference('Data_uncertain').get()
             main()
         else: is_not_none(db.reference('Data_uncertain').get())
 
